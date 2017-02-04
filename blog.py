@@ -170,10 +170,8 @@ class EditPost(BlogHandler):
 		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
 		post = db.get(key)
 
-		subject = self.request.get('subject')
-		content = self.request.get('content')
+		self.render("edit-post.html", post = post)
 
-		self.render("edit-post.html", post = post, subject = subject, content = content)
 
 # Like Button
 

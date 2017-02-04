@@ -111,6 +111,8 @@ input[type="button"] {
     padding: 5px;
 }
 
+
+
 .submit-btn {
     font-size: 15px;
     margin-top: 5px;
@@ -143,6 +145,11 @@ input[type="button"] {
 .post-title {
     font-size: 24px;
     font-weight: bold;
+}
+
+.post-title a {
+    text-decoration: none;
+    color: black;
 }
 
 .post-date {

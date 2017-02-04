@@ -1,7 +1,7 @@
 <div class="post">
   <div class="post-heading">    
     <div class="post-title">
-      <a href="">{{p.subject}}</a>
+      <a href="/post/{{p.key().id()}}">{{p.subject}}</a>
     </div>
 
     <div class="post-date">
@@ -22,7 +22,7 @@
           {% else %}
             {{p.like}}
           {% endif %}
-      | <!-- fix link --> <a href="/edit">Edit</a>
+      | <a href="/edit/{{p.key().id()}}">Edit</a> 
       </form>
     </div>
   </div>
