@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link type="text/css" rel="stylesheet" href="/static/main.css" />
+
+  <title>Hayden's Blog</title>
+</head>
+
+<body>
+	{% if user %}	
+		<p class="account">
+			<a href="/new">New Post</a> | <a href="/logout">Logout</a>
+			<p class="user-welcome">Welcome, {{user.name}}</p>
+		</p>
+	{% else %}
+		<p class="account">
+			<a href="/signup">Signup</a> | <a href="/login">Login</a></a>
+		</p>
+	{% endif %}
+
+	<div class="main-wrap">
+		<a href="/" class="main-title">
+  		Hayden's Blog
+		</a>
+	</div>
+
+	<div id="content">
+	{% block content %}
+	{% endblock %}
+	</div>
+</body>
+
+</html>
+

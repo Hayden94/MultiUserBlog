@@ -1,0 +1,29 @@
+<div class="post">
+  <div class="post-heading">    
+    <div class="post-title">
+      <a href="">{{p.subject}}</a>
+    </div>
+
+    <div class="post-date">
+      {{p.created.strftime("%b %d, %Y")}}
+    </div>
+  </div>
+
+  <div class="post-content">
+    {{p._render_text | safe}}
+  </div>
+
+  <div class="post-footer">
+    <div class="post-links">
+      <form method="post">
+        <input type="submit" class="like-btn" value="&#128077; Like">
+          {% if p.like == None %}
+          0
+          {% else %}
+            {{p.like}}
+          {% endif %}
+      | <!-- fix link --> <a href="/edit">Edit</a>
+      </form>
+    </div>
+  </div>
+</div>
