@@ -52,6 +52,11 @@ table {
     margin-top: 35px;
 }
 
+.comment-field {
+    width: 500px;
+    height: 75px;
+}
+
 .user-welcome {
     margin-top: -30px;
     text-align: left;
@@ -176,4 +181,32 @@ input[type="button"] {
 
 .post-links a {
     text-decoration: none;
+}
+
+.delete-post {
+    border: 1px solid grey;
+    margin-bottom: 10px;
+}
+
+.delete-subject {
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+}
+
+.delete-content {
+    margin-bottom: 5px;
+    margin-left: 5px;
+}
+
+.delete-message {
+    font-weight: bold;
+    color: red;
+    text-align: center;
+    margin-bottom: 13px;
+}
+
+.delete-cancel {
+    text-align: center;
 }

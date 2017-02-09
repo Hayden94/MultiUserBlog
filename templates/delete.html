@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="delete-post">
+		<div class="delete-subject">{{subject}}</div>
+		<div class="delete-content">{{content}}</div>
+	</div>
+	
+	<div class="delete-message">{{message}}</div>
+
+	<form method="post">
+		<input type="submit" value="Confirm">
+	</form>
+
+	<a href="/post/{{post_id}}"><p class="delete-cancel">Cancel</p></a>
+
+{% endblock %}

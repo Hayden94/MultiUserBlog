@@ -117,13 +117,24 @@ def blog_key(name = 'default'):
 class Post(db.Model):
 	subject = db.StringProperty(required = True)
 	content = db.TextProperty(required = True)
+	creator = db.IntegerProperty(required = True)
 	created = db.DateTimeProperty(auto_now_add = True)
 	last_modified = db.DateTimeProperty(auto_now = True)
-	like = db.IntegerProperty()
 
 	def render(self):
 		self._render_text = self.content.replace('\n', '<br>')
 		return render_str("post.html", p = self)
+
+# Like Model
+
+class Likes(db.Model):
+	user = db.IntegerProperty(required=True)
+
+# Comment model
+
+class Comment(db.Model):
+    author = db.ReferenceProperty(User, required=True)
+    content = db.TextProperty(required=True)
 
 #Blog Home
 
@@ -139,11 +150,15 @@ class NewPost(BlogHandler):
 		self.render("newpost.html")
 
 	def post(self):
+		if not self.user:
+			return self.redirect('/login')
+
 		subject = self.request.get('subject')
 		content = self.request.get('content')
+		creator = self.user.key().id()
 
 		if subject and content:
-			p = Post(parent = blog_key(), subject = subject, content = content)
+			p = Post(parent = blog_key(), subject = subject, content = content, creator = creator)
 			p.put()
 			self.redirect('/post/%s' % str(p.key().id()))
 		else:
@@ -170,10 +185,58 @@ class EditPost(BlogHandler):
 		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
 		post = db.get(key)
 
-		self.render("edit-post.html", post = post)
+		if not self.user:
+			self.redirect('/login')
+		elif not self.user.key().id() == post.creator:
+			self.write('You are not allowed to edit this post')
+		else:
+			subject = post.subject
+			content = post.content
+			self.render("edit-post.html", subject = subject, content = content, post_id = post_id, edit = True)
 
+	def post(self, post_id):
+		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
+		post = db.get(key)
 
-# Like Button
+		if (not self.user) or (not self.user.key().id() == post.creator):
+			return self.redirect('/login')
+
+		subject = self.request.get('subject')
+		content = self.request.get('content')
+
+		if subject and content:
+			key = db.Key.from_path('Post', int(post_id), parent=blog_key())
+			p = db.get(key)
+			p.subject = subject
+			p.content = content
+			p.put()
+			self.redirect('/post/%s' % post_id)
+		else:
+			error = 'Please enter both a subject and some content!'
+			self.render('edit-post.html', subject = subject, content = content, error = error, post_id = post_id, edit = True)
+
+# Delete Post
+
+class DeletePost(BlogHandler):
+	def get(self, post_id):
+		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
+		post = db.get(key)
+
+		if not self.user:
+			self.redirect('/login')
+		elif not self.user.key().id() == post.creator:
+			self.write('You are not allowed to delete this post.')
+		else:
+			message = 'Are you sure you want to delete this post?'
+
+			self.render('delete.html', post_id = post_id, message = message, subject = post.subject, content = post.content)
+
+	def post(self, post_id):
+		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
+		post = db.get(key)
+
+		post.delete()
+		self.write('Post deleted. <a href="/">Back to Home page.</a>')
 
 
 #check valid signup inputs
@@ -281,6 +344,7 @@ app = webapp2.WSGIApplication([('/', BlogFront),
 							   ('/login', Login),
 							   ('/logout', Logout),
 							   ('/welcome', Welcome),
-							   ('/edit/([0-9]+)', EditPost)
+							   ('/edit/([0-9]+)', EditPost),
+							   ('/delete/([0-9]+)', DeletePost)
 							   ],
 							  debug=True)
