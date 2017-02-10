@@ -125,7 +125,7 @@ class Post(db.Model):
 		self._render_text = self.content.replace('\n', '<br>')
 		return render_str("post.html", p = self)
 
-# Like Model
+# Like model
 
 class Likes(db.Model):
 	user = db.IntegerProperty(required=True)
@@ -147,7 +147,8 @@ class BlogFront(BlogHandler):
 
 class NewPost(BlogHandler):
 	def get(self):
-		self.render("newpost.html")
+		title = 'New Post'
+		self.render("newpost.html", title = title)
 
 	def post(self):
 		if not self.user:
@@ -172,11 +173,14 @@ class PostPage(BlogHandler):
 		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
 		post = db.get(key)
 
+		comments = Comment.all().ancestor(post)
+
+		# make sure the post exists
 		if not post:
 			self.error(404)
 			return
 
-		self.render("permalink.html", post = post)
+		self.render("permalink.html", post = post, comments = comments)
 
 # Edit Post Page
 
@@ -184,15 +188,17 @@ class EditPost(BlogHandler):
 	def get(self, post_id):
 		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
 		post = db.get(key)
+		title = 'Edit Post'
 
 		if not self.user:
 			self.redirect('/login')
 		elif not self.user.key().id() == post.creator:
-			self.write('You are not allowed to edit this post')
+			self.write('<div style="text-align: center;">You are not allowed to edit this post.' +
+						'<br><br><a href="/">Blog Home</a></div>')
 		else:
 			subject = post.subject
 			content = post.content
-			self.render("edit-post.html", subject = subject, content = content, post_id = post_id, edit = True)
+			self.render("newpost.html", subject = subject, content = content, post_id = post_id, title = title, edit = True)
 
 	def post(self, post_id):
 		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
@@ -213,7 +219,7 @@ class EditPost(BlogHandler):
 			self.redirect('/post/%s' % post_id)
 		else:
 			error = 'Please enter both a subject and some content!'
-			self.render('edit-post.html', subject = subject, content = content, error = error, post_id = post_id, edit = True)
+			self.render('newpost.html', subject = subject, content = content, error = error, post_id = post_id, edit = True)
 
 # Delete Post
 
@@ -222,10 +228,12 @@ class DeletePost(BlogHandler):
 		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
 		post = db.get(key)
 
+		# only logged in users can delete posts
 		if not self.user:
 			self.redirect('/login')
 		elif not self.user.key().id() == post.creator:
-			self.write('You are not allowed to delete this post.')
+			self.write('<div style="text-align: center;">You are not allowed to delete this post.' +
+						'<br><br><a href="/">Blog Home</a></div>')
 		else:
 			message = 'Are you sure you want to delete this post?'
 
@@ -235,9 +243,53 @@ class DeletePost(BlogHandler):
 		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
 		post = db.get(key)
 
-		post.delete()
-		self.write('Post deleted. <a href="/">Back to Home page.</a>')
+		if (not self.user) or (not self.user.key().id() == post.creator):
+			return self.redirect('/login')
+		else:
+			post.delete()
+			
+			self.write('<div style="text-align: center;">Post deleted.<br><br><a href="/">Blog Home</a></div>')
 
+class AddComment(BlogHandler):
+	def get(self, post_id):
+		# only logged in users can add comments
+		if not self.user:
+			self.redirect('/login')
+		else:
+			self.render('comment.html')
+
+	def post(self, post_id):
+		# only logged in users can add comments
+		if not self.user:
+			self.redirect('/login')
+
+		content = self.request.get('content')
+		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
+		post = db.get(key)
+
+		if content:
+			comment = Comment(
+				parent = post,
+				content = content,
+				author = self.user
+				)
+
+			comment.put()
+			self.redirect('/post/%s' % post_id)
+		else:
+			error = 'Please enter some content'
+
+			self.render('comment.html', content = content, error = error)
+
+# class EditComment(BlogHandler):
+	# def get(self):
+
+	# def post(self):
+
+# class DeleteComment(BlogHandler):
+	# def get(self):
+
+	# def post(self):
 
 #check valid signup inputs
 
@@ -313,7 +365,7 @@ class Login(BlogHandler):
 	
 	def post(self):
 		username = self.request.get('username')
-		password = self.request.get('username')
+		password = self.request.get('password')
 
 		u = User.login(username, password)
 		if u:
@@ -338,13 +390,14 @@ class Welcome(BlogHandler):
 			self.redirect('/signup')
 
 app = webapp2.WSGIApplication([('/', BlogFront),
-							   ('/post/([0-9]+)', PostPage),
 							   ('/new', NewPost),
 							   ('/signup', Register),
 							   ('/login', Login),
 							   ('/logout', Logout),
 							   ('/welcome', Welcome),
+							   ('/post/([0-9]+)', PostPage),
 							   ('/edit/([0-9]+)', EditPost),
-							   ('/delete/([0-9]+)', DeletePost)
+							   ('/delete/([0-9]+)', DeletePost),
+							   ('/comment/([0-9]+)', AddComment)
 							   ],
 							  debug=True)

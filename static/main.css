@@ -34,18 +34,13 @@ table {
 }
 
 .error {
+    padding: 5px;
     color: red;
 }
 
-.cancel-btn {
-    display: block;
-    margin: 0 auto;
-    font-size: 16px;
-    background-color: #800000;
-    border: 1px solid black;
-    border-radius: 3px;
-    color: white;
-    padding: 5px;
+.cancel-link {
+    margin-top: 3px;
+    text-align: center;
 }
 
 .comments {
@@ -53,8 +48,28 @@ table {
 }
 
 .comment-field {
-    width: 500px;
+    width: 50%;
     height: 75px;
+}
+
+.ind-comment {
+    border: 1px solid grey;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.comment-content {
+    margin-left: 5px;
+}
+
+.comment-author {
+    margin-left: 15px;
+}
+
+.comment-links {
+    margin-left: 5px;
+    padding-bottom: 5px;
 }
 
 .user-welcome {
@@ -205,8 +220,4 @@ input[type="button"] {
     color: red;
     text-align: center;
     margin-bottom: 13px;
-}
-
-.delete-cancel {
-    text-align: center;
 }

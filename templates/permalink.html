@@ -2,16 +2,17 @@
 
 {% block content %}
   {{post.render() | safe}}
-	<div class="comments">
-  		<h2>Comments</h2>
+  <br><br>
 
-	<form method="post" class="comments">
+  {% for comment in comments %}
+    <div class="ind-comment">
+      <p class="comment-content">{{comment.content}}</p>
+      <p class="comment-author">- by <i>{{comment.author.name}}</i></p>
+      <div class="comment-links">
+      	<a href="/comment/{{post.key().id()}}/edit/{{comment.key().id()}}/">Edit</a>
+      	<a href="/comment/{{post.key().id()}}/delete/{{comment.key().id()}}/">Delete</a>
+      </div>
+    </div>
+  {% endfor %}
 
-	<textarea name="comments" class="comment-field"></textarea>
-
-	<input type="submit" class="submit-btn">
-
-	</form>
-	
-	</div>
 {% endblock %}

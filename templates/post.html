@@ -18,11 +18,11 @@
       <form method="post">
         <input type="submit" class="like-btn" value="&#128077; Like">
           {% if p.like == None %}
-          0
+            <p>0</p>
           {% else %}
             {{p.like}}
           {% endif %}
-      | <a href="/edit/{{p.key().id()}}">Edit</a> | <a href="/delete/{{p.key().id()}}">Delete</a> 
+      | <a href="/comment/{{p.key().id()}}">Comment</a> | <a href="/edit/{{p.key().id()}}">Edit</a> | <a href="/delete/{{p.key().id()}}">Delete</a> 
       </form>
     </div>
   </div>
