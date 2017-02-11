@@ -2,9 +2,19 @@
 
 {% block content %}
 
-  {% for p in posts %}
-    {{ p.render() | safe }}
-    <br><br>
+  {% for post in posts %}
+    <div class="post">
+  		<div class="post-heading">    
+    		<div class="post-title">
+      			<a href="/post/{{post.key().id()}}">{{post.subject}}</a>
+    		</div>
+
+    	<div class="post-date">
+      		{{post.created.strftime("%b %d, %Y")}}
+    	</div>
+  	</div>
+
+  	<div class="post-content">{{post.content | safe}}</div>
   {% endfor %}
 
 {% endblock %}

@@ -121,10 +121,6 @@ class Post(db.Model):
 	created = db.DateTimeProperty(auto_now_add = True)
 	last_modified = db.DateTimeProperty(auto_now = True)
 
-	def render(self):
-		self._render_text = self.content.replace('\n', '<br>')
-		return render_str("post.html", p = self)
-
 # Like model
 
 class Likes(db.Model):
@@ -180,7 +176,7 @@ class PostPage(BlogHandler):
 			self.error(404)
 			return
 
-		self.render("permalink.html", post = post, comments = comments)
+		self.render("post.html", post = post, comments = comments)
 
 # Edit Post Page
 
@@ -310,7 +306,7 @@ def valid_email(email):
 class Signup(BlogHandler):
 
 	def get(self):
-		self.render("signup-form.html")
+		self.render("signup.html")
 
 	def post(self):
 		have_error = False
@@ -338,7 +334,7 @@ class Signup(BlogHandler):
 			have_error = True
 
 		if have_error:
-			self.render('signup-form.html', **params)
+			self.render('signup.html', **params)
 		else:
 			self.done()
 
@@ -351,7 +347,7 @@ class Register(Signup):
 		u = User.by_name(self.username)
 		if u:
 			msg = 'That user already exists.'
-			self.render('signup-form.html', error_username = msg)
+			self.render('signup.html', error_username = msg)
 		else:
 			u = User.register(self.username, self.password, self.email)
 			u.put()
@@ -361,7 +357,7 @@ class Register(Signup):
 
 class Login(BlogHandler):
 	def get(self):
-		self.render('login-form.html')
+		self.render('login.html')
 	
 	def post(self):
 		username = self.request.get('username')
@@ -373,7 +369,7 @@ class Login(BlogHandler):
 			self.redirect('/')
 		else:
 			msg = 'Invalid Login'
-			self.render('login-form.html', error = msg)
+			self.render('login.html', error = msg)
 
 class Logout(BlogHandler):
 	def get(self):

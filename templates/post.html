@@ -1,29 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
 <div class="post">
   <div class="post-heading">    
     <div class="post-title">
-      <a href="/post/{{p.key().id()}}">{{p.subject}}</a>
+      {{post.subject}}
     </div>
 
     <div class="post-date">
-      {{p.created.strftime("%b %d, %Y")}}
+      {{post.created.strftime("%b %d, %Y")}}
     </div>
   </div>
 
   <div class="post-content">
-    {{p._render_text | safe}}
+    {{post.content | safe}}
   </div>
 
   <div class="post-footer">
     <div class="post-links">
       <form method="post">
         <input type="submit" class="like-btn" value="&#128077; Like">
-          {% if p.like == None %}
+          {% if post.like == None %}
             <p>0</p>
           {% else %}
-            {{p.like}}
+            {{post.like}}
           {% endif %}
-      | <a href="/comment/{{p.key().id()}}">Comment</a> | <a href="/edit/{{p.key().id()}}">Edit</a> | <a href="/delete/{{p.key().id()}}">Delete</a> 
+      | <a href="/comment/{{post.key().id()}}">Comment</a> | <a href="/edit/{{post.key().id()}}">Edit</a> | <a href="/delete/{{post.key().id()}}">Delete</a> 
       </form>
     </div>
   </div>
 </div>
+  <br><br>
+
+  {% for comment in comments %}
+    <div class="ind-comment">
+      <p class="comment-content">{{comment.content}}</p>
+      <p class="comment-author">- by <i>{{comment.author.name}}</i></p>
+      <div class="comment-links">
+      	<a href="/comment/{{post.key().id()}}/edit/{{comment.key().id()}}/">Edit</a>
+      	<a href="/comment/{{post.key().id()}}/delete/{{comment.key().id()}}/">Delete</a>
+      </div>
+    </div>
+  {% endfor %}
+
+{% endblock %}
