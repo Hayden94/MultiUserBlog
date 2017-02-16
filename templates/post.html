@@ -17,14 +17,10 @@
   </div>
 
   <div class="post-footer">
+    <p class="like-error">{{error}}</p>
     <div class="post-links">
       <form method="post">
-        <input type="submit" class="like-btn" value="&#128077; Like">
-          {% if post.like == None %}
-            <p>0</p>
-          {% else %}
-            {{post.like}}
-          {% endif %}
+        <input type="submit" class="like-btn" value="{{vote}}">
       | <a href="/comment/{{post.key().id()}}">Comment</a> | <a href="/edit/{{post.key().id()}}">Edit</a> | <a href="/delete/{{post.key().id()}}">Delete</a> 
       </form>
     </div>

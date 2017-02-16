@@ -124,13 +124,14 @@ class Post(db.Model):
 # Like model
 
 class Likes(db.Model):
-	user = db.IntegerProperty(required=True)
+	user = db.IntegerProperty(required = True)
 
 # Comment model
 
 class Comment(db.Model):
-    author = db.ReferenceProperty(User, required=True)
-    content = db.TextProperty(required=True)
+	author = db.ReferenceProperty(User, required=True)
+	content = db.TextProperty(required=True)
+	commentId = db.IntegerProperty(required=True)
 
 #Blog Home
 
@@ -176,7 +177,44 @@ class PostPage(BlogHandler):
 			self.error(404)
 			return
 
-		self.render("post.html", post = post, comments = comments)
+		# only logged in users may like posts
+		if self.user:
+			user_id = self.user.key().id()
+
+			if Likes.all().ancestor(post).filter('user =', user_id).get():
+				vote = u"\U0001F44E" + ' Unlike'
+			else:
+				vote = 	u"\U0001F44D" + ' Like'
+			self.render('post.html', post = post, vote = vote, comments = comments)
+		else:
+			vote = 	u"\U0001F44D" + ' Like'
+			self.render('post.html', post = post, vote = vote, comments = comments)
+
+	def post(self, post_id):
+		# only logged in users may like posts
+		if not self.user:
+			return self.redirect('/login')
+
+		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
+		post = db.get(key)
+
+		user_id = self.user.key().id()
+
+		# users cannot like their own posts
+		if user_id == post.creator:
+			vote = u"\U0001F44D" + ' Like'
+			error = 'You are not allowed to like your own posts!'
+
+			self.render('post.html', post = post, vote = vote, error = error)
+		# like post and put into db
+		else:
+			l = Likes.all().ancestor(post).filter('user =', user_id).get()
+			if l:
+				l.delete()
+			else:
+				like = Likes(parent = post, user = user_id)
+				like.put()
+			self.redirect('/post/%s' % post_id)
 
 # Edit Post Page
 
@@ -267,7 +305,8 @@ class AddComment(BlogHandler):
 			comment = Comment(
 				parent = post,
 				content = content,
-				author = self.user
+				author = self.user,
+				commentId = int(post_id)
 				)
 
 			comment.put()
@@ -277,15 +316,34 @@ class AddComment(BlogHandler):
 
 			self.render('comment.html', content = content, error = error)
 
-# class EditComment(BlogHandler):
-	# def get(self):
-
-	# def post(self):
-
 # class DeleteComment(BlogHandler):
-	# def get(self):
+	# def get(self, post_id):
+		# key = db.Key.from_path('Comment', int(post_id), parent = blog_key())
+		# comment = db.get(key)
 
+		# if not self.user:
+			# self.redirect('/login')
+		# elif not self.user.key() == comment.author.key():
+			# self.write('<div style="text-align: center;">You are not allowed to delete this comment.<br><br>' +
+						# '<a href="/">Blog Home</a></div>')
+		# else:
+			# message = 'Are you sure you want to delete this comment?'
+			# content = comment.content
+			# self.render('delete.html', message = message, content = content)    
 	# def post(self):
+
+# class EditComment(BlogHandler):
+	# def get(self, post_id):
+		# key = db.Key.from_path('Comment',int(post_id),parent=blog_key())
+		# comment = db.get(key)
+
+		# if not self.user:
+			# self.redirect('/login')
+		# elif not self.user.key() == comment.author.key():
+			# self.write('You are not allowed to edit this comment')
+		# else:
+			# content = comment.content
+			# self.render('comment.html', content = content, post_id = post_id, edit = True)
 
 #check valid signup inputs
 
@@ -394,6 +452,8 @@ app = webapp2.WSGIApplication([('/', BlogFront),
 							   ('/post/([0-9]+)', PostPage),
 							   ('/edit/([0-9]+)', EditPost),
 							   ('/delete/([0-9]+)', DeletePost),
-							   ('/comment/([0-9]+)', AddComment)
+							   ('/comment/([0-9]+)', AddComment),
+							   # ('/comment/edit/([0-9]+)', EditComment)
+							   # ('/comment/([0-9]+)/delete/([0-9]+)', DeleteComment)
 							   ],
 							  debug=True)
