@@ -132,6 +132,7 @@ class Comment(db.Model):
 	author = db.ReferenceProperty(User, required=True)
 	content = db.TextProperty(required=True)
 	commentId = db.IntegerProperty(required=True)
+	created = db.DateTimeProperty(auto_now_add = True)
 
 #Blog Home
 
@@ -171,13 +172,13 @@ class PostPage(BlogHandler):
 	def get(self, post_id):
 		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
 		post = db.get(key)
+
 		comments = Comment.all().ancestor(post)
 
 		# make sure the post exists
 		if not post:
 			self.error(404)
 			return
-
 		# only logged in users may like posts
 		if self.user:
 			user_id = self.user.key().id()
@@ -186,22 +187,23 @@ class PostPage(BlogHandler):
 				status = u"\U0001F44E" + ' Unlike'
 			else:
 				status = u"\U0001F44D" + ' Like'
-			self.render('post.html', post = post, status = status, comments = comments)
+			self.render('post.html', post = post, post_id = post_id, status = status,  comments = comments)
 		else:
 			status = u"\U0001F44D" + ' Like'
-			self.render('post.html', post = post, status = status, comments = comments)
+			self.render('post.html', post = post, post_id = post_id, status = status, comments = comments)
 
 	def post(self, post_id):
-		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
-		post = db.get(key)
-		comments = Comment.all().ancestor(post)
-		user_id = self.user.key().id()
-
 		# only logged in users may like posts
 		if not self.user:
 			self.redirect('/login')
+
+		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
+		post = db.get(key)
+		user_id = self.user.key().id()
+		comments = Comment.all().ancestor(post)
+
 		# users cannot like their own posts
-		elif user_id == post.creator:
+		if user_id == post.creator:
 			status = u"\U0001F44D" + ' Like'
 			error = 'You cannot like your own posts'
 
@@ -300,8 +302,11 @@ class DeletePost(BlogHandler):
 			return self.redirect('/login')
 		else:
 			post.delete()
-			
-			self.write('<div style="text-align: center;">Post deleted.<br><br><a href="/">Blog Home</a></div>')
+			message = 'Your post has been deleted'
+			link_src = '/'
+			link_name = 'Blog Home'
+
+			self.render('information.html', message = message, link_src = link_src, link_name = link_name)
 
 class AddComment(BlogHandler):
 	def get(self, post_id):
@@ -309,7 +314,7 @@ class AddComment(BlogHandler):
 		if not self.user:
 			self.redirect('/login')
 		else:
-			self.render('comment.html')
+			self.render('comment.html', post_id = post_id)
 
 	def post(self, post_id):
 		# only logged in users can add comments
@@ -364,6 +369,17 @@ class AddComment(BlogHandler):
 		# else:
 			# content = comment.content
 			# self.render('comment.html', content = content, post_id = post_id, edit = True)
+
+class Information(BlogHandler):
+	def get(self):
+		if not self.user:
+			self.redirect('/login')
+		else:
+			message = 'You have reached this page at an error'
+			link_src = '/'
+			link_name = 'Blog Home'
+
+			self.render('information.html', message = message, link_src = link_src, link_name = link_name)
 
 #check valid signup inputs
 
@@ -431,7 +447,12 @@ class Register(Signup):
 			u.put()
 
 			self.login(u)
-			self.redirect('/welcome')
+
+			message = 'Welcome, ' + self.username
+			link_src = '/new'
+			link_name = 'New Post'
+
+			self.render('information.html', message = message, link_src = link_src, link_name = link_name)
 
 class Login(BlogHandler):
 	def get(self):
@@ -454,26 +475,17 @@ class Logout(BlogHandler):
 		self.logout()
 		self.redirect('/')
 
-# Welcome page after user signup
-
-class Welcome(BlogHandler):
-	def get(self):
-		if self.user:
-			self.render('welcome.html', username = self.user.name)
-		else:
-			self.redirect('/signup')
-
 app = webapp2.WSGIApplication([('/', BlogFront),
 							   ('/new', NewPost),
 							   ('/signup', Register),
 							   ('/login', Login),
 							   ('/logout', Logout),
-							   ('/welcome', Welcome),
 							   ('/post/([0-9]+)', PostPage),
 							   ('/edit/([0-9]+)', EditPost),
 							   ('/delete/([0-9]+)', DeletePost),
 							   ('/comment/([0-9]+)', AddComment),
 							   # ('/comment/edit/([0-9]+)', EditComment)
-							   # ('/comment/([0-9]+)/delete/([0-9]+)', DeleteComment)
+							   # ('/comment/([0-9]+)/delete/([0-9]+)', DeleteComment).
+							   ('/info', Information)
 							   ],
 							  debug=True)

@@ -33,6 +33,14 @@ table {
     margin-top: -5px;
 }
 
+.signlog-link {
+    margin-top: 5px;
+}
+
+.signlog-link a {
+    text-decoration: none;
+}
+
 .logged-1, .logged-2 {
     color: #007acc;
 }
@@ -106,22 +114,25 @@ table {
 
 .ind-comment {
     border: 1px solid grey;
+    padding: 5px;
     border-radius: 5px;
     margin: 5px 100px;
 }
 
-.comment-author {
+.comment-details {
     margin-left: 5px;
-    font-weight: bold;
-}
-
-.comment-content {
-    margin-left: 25px;
 }
 
 .comment-links {
     margin-left: 5px;
-    padding-bottom: 5px;
+    text-align: right;
+}
+
+.comment-date {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    color: #999;
 }
 
 .user-welcome {
@@ -133,6 +144,10 @@ table {
 form {
     text-align: center;
     text-decoration: none;
+}
+
+form table {
+    margin-bottom: 10px;
 }
 
 label {
@@ -199,14 +214,6 @@ input[type="button"] {
     padding: 5px;
 }
 
-
-
-.submit-btn {
-    font-size: 15px;
-    margin-top: 5px;
-    text-align: center;
-}
-
 .main-wrap {
     text-align: center;
 }
@@ -250,7 +257,7 @@ input[type="button"] {
 }
 
 .post-content {
-    margin-top: 5px;
+    margin: 5px 10px;
 }
 
 .post-footer {
@@ -320,4 +327,12 @@ input[type="button"] {
     text-align: center;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.dcomplete {
+    text-align: center;
+}
+
+.dcomplete a {
+    text-decoration: none;
 }
