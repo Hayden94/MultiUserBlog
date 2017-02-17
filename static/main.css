@@ -24,7 +24,7 @@ table {
     text-align: center;
 }
 
-.account a {
+.account a, .comment-links a {
     text-decoration: none;
 }
 
@@ -33,14 +33,65 @@ table {
     margin-top: -5px;
 }
 
-.error {
-    padding: 5px;
+.logged-1, .logged-2 {
+    color: #007acc;
+}
+
+.logged-1:hover, .logged-2:hover {
+    color: #002e4d;
+}
+
+.blue-title {
+    color: #007acc;
+}
+
+.red-title {
     color: red;
 }
 
+.submit {
+    color: white;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 1px 15px;
+    background-color: #007acc;
+}
+
+.submit:hover {
+    cursor: pointer;
+    background-color: #005c99;
+}
+
+.error {
+    text-align: center;
+    padding: 5px;
+    color: red;
+    font-weight: bold;
+}
+
 .cancel-link {
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.cancel-link p {
+    text-decoration: none;
+    text-align: center;
     margin-top: 3px;
     text-align: center;
+    color: white;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 1px 15px;
+    background-color: red;
+    text-align: center;
+}
+
+.cancel-link p:hover {
+    background-color: #cc0000;
 }
 
 .comments {
@@ -50,21 +101,22 @@ table {
 .comment-field {
     width: 50%;
     height: 75px;
+    margin-bottom: 8px;
 }
 
 .ind-comment {
     border: 1px solid grey;
     border-radius: 5px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
-.comment-content {
-    margin-left: 5px;
+    margin: 5px 100px;
 }
 
 .comment-author {
-    margin-left: 15px;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+.comment-content {
+    margin-left: 25px;
 }
 
 .comment-links {
@@ -112,19 +164,29 @@ textarea {
 .like-btn {
     border: 1px solid black;
     border-radius: 3px;
-    padding: 1px;
+    padding: 1px 15px;
     background-color: #007acc;
     color: white;
+    position: absolute;
+    left: 0px;
 }
 
 .like-btn:hover {
     cursor: pointer;
+    background-color: #005c99;
 }
 
-.like-error {
+.like-users {
+    text-align: center;
+    color: #999;
+}
+
+.post-error {
     color: red;
+    font-weight: bold;
     position: absolute;
-    left: 0px;
+    left: 100px;
+    top: -14px;
 }
 
 input[type="button"] {
@@ -160,7 +222,7 @@ input[type="button"] {
 }
 
 .post + .post {
-    margin-top: 15px;
+    margin-top: 25px;
 }
 
 .post-heading {
@@ -196,36 +258,66 @@ input[type="button"] {
 }
 
 .post-links {
-    position: absolute;
-    right: 0px;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
-.post-links a {
+.post-text {
+    margin-bottom: 10px;
+}
+
+.ced-links {
+    position: absolute;
+    right: 0px;
+}
+
+.ced-links a {
     text-decoration: none;
 }
 
-.delete-post {
+.ind-comment {
+    background-color: #e6e6e6;
+}
+
+.delete-link {
+    color: white;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 1px 15px;
+    background-color: red;
+}
+
+.edit-link, .comment-link {
+    color: white;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 1px 15px;
+    background-color: #007acc;
+}
+
+.comment-link:hover, .edit-link:hover {
+    background-color: #005c99;
+}
+
+.delete-link:hover {
+    background-color: #cc0000;
+}
+
+.st {
     border: 1px solid grey;
     border-radius: 5px;
     margin-bottom: 10px;
 }
 
-.delete-subject {
-    font-weight: bold;
-    margin-top: 5px;
-    margin-bottom: 10px;
-    margin-left: 5px;
-}
-
-.delete-content {
-    margin-bottom: 5px;
-    margin-left: 5px;
+.delete-post {
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 10px 5px;
 }
 
 .delete-message {
     font-weight: bold;
     color: red;
     text-align: center;
-    margin-bottom: 13px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }

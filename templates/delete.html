@@ -1,17 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
+	<h2 class="red-title">Delete {{title}}</h2>
+
 	<div class="delete-post">
-		<div class="delete-subject">{{subject}}</div>
-		<div class="delete-content">{{content}}</div>
+		<div class="post-heading">
+			<div class="post-title">
+				{{subject}}
+			</div>
+
+			<div class="post-date">
+      			{{post.created.strftime("%b %d, %Y")}}
+    		</div>
+		</div>
+
+		<div class="post-content">{{content}}</div>
 	</div>
 	
 	<div class="delete-message">{{message}}</div>
 
 	<form method="post">
-		<input type="submit" value="Confirm">
+		<input type="submit" value="Confirm" class="submit">
 	</form>
 
-	<a href="/post/{{post_id}}"><p class="cancel-link">Cancel</p></a>
+	<a href="/post/{{post_id}}" class="cancel-link"><p>Cancel</p></a>
 
 {% endblock %}

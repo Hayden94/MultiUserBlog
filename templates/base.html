@@ -9,12 +9,12 @@
 <body>
 	{% if user %}	
 		<p class="account">
-			<a href="/new">New Post</a> | <a href="/logout">Logout</a>
+			<a href="/new" class="logged-1">New Post</a> | <a href="/logout" class="logged-2">Logout</a>
 			<p class="user-welcome">Welcome, {{user.name}}</p>
 		</p>
 	{% else %}
 		<p class="account">
-			<a href="/signup">Signup</a> | <a href="/login">Login</a></a>
+			<a href="/signup" class="logged-1">Signup</a> | <a href="/login" class="logged-2">Login</a></a>
 		</p>
 	{% endif %}
 

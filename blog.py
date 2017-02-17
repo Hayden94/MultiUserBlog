@@ -160,8 +160,10 @@ class NewPost(BlogHandler):
 			p.put()
 			self.redirect('/post/%s' % str(p.key().id()))
 		else:
-			error = "Subject and content, please!"
-			self.render("newpost.html", subject=subject, content=content, error=error)
+			title = 'New Post'
+			error = "Please enter both a subject and some content"
+
+			self.render("newpost.html", title = title, subject=subject, content=content, error=error)
 
 # Post permalink
 
@@ -169,7 +171,6 @@ class PostPage(BlogHandler):
 	def get(self, post_id):
 		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
 		post = db.get(key)
-
 		comments = Comment.all().ancestor(post)
 
 		# make sure the post exists
@@ -182,30 +183,29 @@ class PostPage(BlogHandler):
 			user_id = self.user.key().id()
 
 			if Likes.all().ancestor(post).filter('user =', user_id).get():
-				vote = u"\U0001F44E" + ' Unlike'
+				status = u"\U0001F44E" + ' Unlike'
 			else:
-				vote = 	u"\U0001F44D" + ' Like'
-			self.render('post.html', post = post, vote = vote, comments = comments)
+				status = u"\U0001F44D" + ' Like'
+			self.render('post.html', post = post, status = status, comments = comments)
 		else:
-			vote = 	u"\U0001F44D" + ' Like'
-			self.render('post.html', post = post, vote = vote, comments = comments)
+			status = u"\U0001F44D" + ' Like'
+			self.render('post.html', post = post, status = status, comments = comments)
 
 	def post(self, post_id):
-		# only logged in users may like posts
-		if not self.user:
-			return self.redirect('/login')
-
 		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
 		post = db.get(key)
-
+		comments = Comment.all().ancestor(post)
 		user_id = self.user.key().id()
 
+		# only logged in users may like posts
+		if not self.user:
+			self.redirect('/login')
 		# users cannot like their own posts
-		if user_id == post.creator:
-			vote = u"\U0001F44D" + ' Like'
-			error = 'You are not allowed to like your own posts!'
+		elif user_id == post.creator:
+			status = u"\U0001F44D" + ' Like'
+			error = 'You cannot like your own posts'
 
-			self.render('post.html', post = post, vote = vote, error = error)
+			self.render('post.html', post = post, status = status, comments = comments, error = error)
 		# like post and put into db
 		else:
 			l = Likes.all().ancestor(post).filter('user =', user_id).get()
@@ -222,13 +222,21 @@ class EditPost(BlogHandler):
 	def get(self, post_id):
 		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
 		post = db.get(key)
+		comments = Comment.all().ancestor(post)	
 		title = 'Edit Post'
 
 		if not self.user:
 			self.redirect('/login')
 		elif not self.user.key().id() == post.creator:
-			self.write('<div style="text-align: center;">You are not allowed to edit this post.' +
-						'<br><br><a href="/">Blog Home</a></div>')
+			error = 'You cannot edit another user\'s post'
+			user_id = self.user.key().id()
+
+			if Likes.all().ancestor(post).filter('user =', user_id).get():
+				status = u"\U0001F44E" + ' Unlike'
+			else:
+				status = u"\U0001F44D" + ' Like'
+
+			self.render('post.html', post = post, status = status, comments = comments, error = error)
 		else:
 			subject = post.subject
 			content = post.content
@@ -252,8 +260,10 @@ class EditPost(BlogHandler):
 			p.put()
 			self.redirect('/post/%s' % post_id)
 		else:
+			title = 'Edit Post'
 			error = 'Please enter both a subject and some content!'
-			self.render('newpost.html', subject = subject, content = content, error = error, post_id = post_id, edit = True)
+
+			self.render('newpost.html', subject = subject, title = title, content = content, error = error, post_id = post_id, edit = True)
 
 # Delete Post
 
@@ -261,17 +271,26 @@ class DeletePost(BlogHandler):
 	def get(self, post_id):
 		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
 		post = db.get(key)
+		comments = Comment.all().ancestor(post)
 
 		# only logged in users can delete posts
 		if not self.user:
 			self.redirect('/login')
 		elif not self.user.key().id() == post.creator:
-			self.write('<div style="text-align: center;">You are not allowed to delete this post.' +
-						'<br><br><a href="/">Blog Home</a></div>')
+			error = 'You cannot delete another user\'s post'
+			user_id = self.user.key().id()
+			
+			if Likes.all().ancestor(post).filter('user =', user_id).get():
+				status = u"\U0001F44E" + ' Unlike'
+			else:
+				status = u"\U0001F44D" + ' Like'
+
+			self.render('post.html', post = post, status = status, comments = comments, error = error)
 		else:
+			title = 'Post'
 			message = 'Are you sure you want to delete this post?'
 
-			self.render('delete.html', post_id = post_id, message = message, subject = post.subject, content = post.content)
+			self.render('delete.html', post = post, post_id = post_id, title = title, message = message, subject = post.subject, content = post.content)
 
 	def post(self, post_id):
 		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
@@ -327,9 +346,10 @@ class AddComment(BlogHandler):
 			# self.write('<div style="text-align: center;">You are not allowed to delete this comment.<br><br>' +
 						# '<a href="/">Blog Home</a></div>')
 		# else:
+			# title = 'Comment'
 			# message = 'Are you sure you want to delete this comment?'
 			# content = comment.content
-			# self.render('delete.html', message = message, content = content)    
+			# self.render('delete.html', title = title, message = message, content = content)    
 	# def post(self):
 
 # class EditComment(BlogHandler):

@@ -1,24 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>{{title}}</h2>
+    <h2 class="blue-title">{{title}}</h2>
 
     <form method="post">
       <label>
-        <div>Subject</div>
+        <div><b>Subject</b></div>
         <input type="text" name="subject" value="{{subject}}" style="width: 75%;">
       </label>
 
       <label>
-        <div>Post</div>
-        <textarea name="content">{{content}}</textarea>
+        <div><b>Content</b></div>
+        <textarea name="content" class="post-text">{{content}}</textarea>
       </label>
 
-      <div class="error">{{error}}</div>
-
-      <input type="submit" class="new-post-submit">
+      <input type="submit" class="submit">
     </form>
 
-    <a href="/"><p class="cancel-link">Cancel</p></a>
+    <a href="/" class="cancel-link"><p>Cancel</p></a>
+
+    <div class="error">{{error}}</div>
     
 {% endblock %}
