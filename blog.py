@@ -120,11 +120,13 @@ class Post(db.Model):
 	creator = db.IntegerProperty(required = True)
 	created = db.DateTimeProperty(auto_now_add = True)
 	last_modified = db.DateTimeProperty(auto_now = True)
+	value = db.IntegerProperty(default = 0)
 
 # Like model
 
 class Likes(db.Model):
 	user = db.IntegerProperty(required = True)
+	haveliked = db.BooleanProperty(default = False)
 
 # Comment model
 
@@ -164,7 +166,7 @@ class NewPost(BlogHandler):
 			title = 'New Post'
 			error = "Please enter both a subject and some content"
 
-			self.render("newpost.html", title = title, subject=subject, content=content, error=error)
+			self.render("newpost.html", title = title, subject=subject, content=content, error=error, edit = False)
 
 # Post permalink
 
@@ -172,7 +174,6 @@ class PostPage(BlogHandler):
 	def get(self, post_id):
 		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
 		post = db.get(key)
-
 		comments = Comment.all().ancestor(post)
 
 		# make sure the post exists
@@ -184,18 +185,18 @@ class PostPage(BlogHandler):
 			user_id = self.user.key().id()
 
 			if Likes.all().ancestor(post).filter('user =', user_id).get():
-				status = u"\U0001F44E" + ' Unlike'
+				status = u"\U0001F44E"
 			else:
-				status = u"\U0001F44D" + ' Like'
-			self.render('post.html', post = post, post_id = post_id, status = status,  comments = comments)
+				status = u"\U0001F44D"
+			self.render('post.html', post = post, value = post.value, post_id = post_id, status = status,  comments = comments)
 		else:
-			status = u"\U0001F44D" + ' Like'
-			self.render('post.html', post = post, post_id = post_id, status = status, comments = comments)
+			status = u"\U0001F44D"
+			self.render('post.html', post = post, value = post.value, post_id = post_id, status = status, comments = comments)
 
 	def post(self, post_id):
 		# only logged in users may like posts
 		if not self.user:
-			self.redirect('/login')
+			return self.redirect('/login')
 
 		key = db.Key.from_path('Post', int(post_id), parent=blog_key())
 		post = db.get(key)
@@ -204,18 +205,28 @@ class PostPage(BlogHandler):
 
 		# users cannot like their own posts
 		if user_id == post.creator:
-			status = u"\U0001F44D" + ' Like'
 			error = 'You cannot like your own posts'
+			link_src = '/post/' + post_id
+			link_name = 'Back'
 
-			self.render('post.html', post = post, status = status, comments = comments, error = error)
+			self.render('information.html', error = error, link_src = link_src, link_name = link_name)
 		# like post and put into db
 		else:
 			l = Likes.all().ancestor(post).filter('user =', user_id).get()
 			if l:
 				l.delete()
+
+				post.value -= 1
+				post.put()
 			else:
-				like = Likes(parent = post, user = user_id)
+				like = Likes(parent = post, user = user_id, haveliked = True)
 				like.put()
+
+				if like.haveliked is True:
+					post.value += 1
+
+				post.put()
+
 			self.redirect('/post/%s' % post_id)
 
 # Edit Post Page
@@ -231,14 +242,10 @@ class EditPost(BlogHandler):
 			self.redirect('/login')
 		elif not self.user.key().id() == post.creator:
 			error = 'You cannot edit another user\'s post'
-			user_id = self.user.key().id()
+			link_src = '/post/' + post_id
+			link_name = 'Back'
 
-			if Likes.all().ancestor(post).filter('user =', user_id).get():
-				status = u"\U0001F44E" + ' Unlike'
-			else:
-				status = u"\U0001F44D" + ' Like'
-
-			self.render('post.html', post = post, status = status, comments = comments, error = error)
+			self.render('information.html', error = error, link_src = link_src, link_name = link_name)
 		else:
 			subject = post.subject
 			content = post.content
@@ -280,14 +287,10 @@ class DeletePost(BlogHandler):
 			self.redirect('/login')
 		elif not self.user.key().id() == post.creator:
 			error = 'You cannot delete another user\'s post'
-			user_id = self.user.key().id()
-			
-			if Likes.all().ancestor(post).filter('user =', user_id).get():
-				status = u"\U0001F44E" + ' Unlike'
-			else:
-				status = u"\U0001F44D" + ' Like'
+			link_src = '/post/' + post_id
+			link_name = 'Back'
 
-			self.render('post.html', post = post, status = status, comments = comments, error = error)
+			self.render('information.html', error = error, link_src = link_src, link_name = link_name)
 		else:
 			title = 'Post'
 			message = 'Are you sure you want to delete this post?'
@@ -304,7 +307,7 @@ class DeletePost(BlogHandler):
 			post.delete()
 			message = 'Your post has been deleted'
 			link_src = '/'
-			link_name = 'Blog Home'
+			link_name = 'Home'
 
 			self.render('information.html', message = message, link_src = link_src, link_name = link_name)
 
@@ -349,7 +352,7 @@ class AddComment(BlogHandler):
 			# self.redirect('/login')
 		# elif not self.user.key() == comment.author.key():
 			# self.write('<div style="text-align: center;">You are not allowed to delete this comment.<br><br>' +
-						# '<a href="/">Blog Home</a></div>')
+						# '<a href="/">Home</a></div>')
 		# else:
 			# title = 'Comment'
 			# message = 'Are you sure you want to delete this comment?'
@@ -370,16 +373,18 @@ class AddComment(BlogHandler):
 			# content = comment.content
 			# self.render('comment.html', content = content, post_id = post_id, edit = True)
 
+# Handler for welcome after sign up, deletion confirmation, etc.
+
 class Information(BlogHandler):
 	def get(self):
 		if not self.user:
 			self.redirect('/login')
 		else:
-			message = 'You have reached this page at an error'
+			error = 'You have reached this page at an error'
 			link_src = '/'
-			link_name = 'Blog Home'
+			link_name = 'Home'
 
-			self.render('information.html', message = message, link_src = link_src, link_name = link_name)
+			self.render('information.html', error = error, link_src = link_src, link_name = link_name)
 
 #check valid signup inputs
 

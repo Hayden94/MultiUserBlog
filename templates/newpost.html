@@ -17,7 +17,11 @@
       <input type="submit" class="submit">
     </form>
 
-    <a href="/post/{{post_id}}" class="cancel-link"><p>Cancel</p></a>
+    {% if edit %}
+      <a href="/post/{{post_id}}" class="cancel-link"><p>Cancel</p></a>
+    {% else %}
+      <a href="/" class="cancel-link"><p>Cancel</p></a>
+    {% endif %}
 
     <div class="error">{{error}}</div>
     

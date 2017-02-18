@@ -17,38 +17,37 @@
   </div>
 
   <div class="post-footer">
-    <p class="post-error">{{error}}</p>
       <div class="post-links">
         <form method="post">
-          <input type="submit" class="like-btn" value="{{status}}">
+          <div class="like-div">
+            <input type="submit" class="like-btn largefont" value="{{status}}">
+            <div class="like-value largefont">{{value}}</div>
+          </div>
         </form>
 
         <div class="ced-links">
-          <a href="/comment/{{post.key().id()}}" class="comment-link">Comment</a>
+          <a href="/comment/{{post.key().id()}}" class="comment-link largefont">&#128172;</a>
 
-          <a href="/edit/{{post.key().id()}}" class="edit-link">Edit</a>
+          <a href="/edit/{{post.key().id()}}" class="edit-link largefont">&#128393;</a>
 
-          <a href="/delete/{{post.key().id()}}" class="delete-link">Delete</a>
+          <a href="/delete/{{post.key().id()}}" class="delete-link largefont">&#10008;</a>
         </div>
       </div>
   </div>
 </div>
 
 <br><br>
-  <!-- <div class="like-users">
-    
-  </div> -->
 
-  <h2 class="blue-title">{{comm}}</h2>
+  <h2 class="blue-title">Comments</h2>
 
-  {% for comment in comments %}
+{% for comment in comments %}
   <div class="ind-comment">
 
     <i class="comment-details"><b>{{comment.author.name}}</b>: {{comment.content}}</i>
 
     <div class="comment-links">
-      <a href="/comment/{{post.key().id()}}/edit/{{comment.key().id()}}/" class="logged-1">Edit</a>
-      <a href="/comment/{{post.key().id()}}/delete/{{comment.key().id()}}/" class="logged-1">Delete</a>
+      <a href="/comment/{{post.key().id()}}/edit/{{comment.key().id()}}/" class="largefont">&#128393;</a>
+      <a href="/comment/{{post.key().id()}}/delete/{{comment.key().id()}}/" class="largefont">&#10008;</a>
     </div>
   </div>
 {% endfor %}

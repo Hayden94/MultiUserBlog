@@ -6,6 +6,7 @@ body {
     margin: 0 auto;
     padding: 10px;
     color: #333;
+    background-color: #e6e6e6;
 }
 
 h2 {
@@ -46,7 +47,7 @@ table {
 }
 
 .logged-1:hover, .logged-2:hover {
-    color: #002e4d;
+    color: #005c99;
 }
 
 .blue-title {
@@ -117,6 +118,7 @@ table {
     padding: 5px;
     border-radius: 5px;
     margin: 5px 100px;
+    background-color: white;
 }
 
 .comment-details {
@@ -126,13 +128,18 @@ table {
 .comment-links {
     margin-left: 5px;
     text-align: right;
+    color: #404040;
 }
 
-.comment-date {
-    position: absolute;
-    right: 0px;
-    bottom: 0px;
-    color: #999;
+.comment-links a {
+    color: #404040;
+    font-size: 20px;
+    padding: 0px 2px;
+}
+
+.comment-links a:hover {
+    color: #000;
+    font-weight: bold;
 }
 
 .user-welcome {
@@ -176,14 +183,17 @@ textarea {
     font-family: monospace;
 }
 
+.like-div {
+    position: absolute;
+    left: 0px;
+}
+
 .like-btn {
     border: 1px solid black;
     border-radius: 3px;
-    padding: 1px 15px;
+    padding: 1px 10px;
     background-color: #007acc;
     color: white;
-    position: absolute;
-    left: 0px;
 }
 
 .like-btn:hover {
@@ -191,17 +201,13 @@ textarea {
     background-color: #005c99;
 }
 
-.like-users {
-    text-align: center;
-    color: #999;
-}
-
-.post-error {
-    color: red;
-    font-weight: bold;
-    position: absolute;
-    left: 100px;
-    top: -14px;
+.like-value {
+    display: inline-block;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 2px 8px;
+    background-color: white;
+    color: black;
 }
 
 input[type="button"] {
@@ -281,10 +287,6 @@ input[type="button"] {
     text-decoration: none;
 }
 
-.ind-comment {
-    background-color: #e6e6e6;
-}
-
 .delete-link {
     color: white;
     border: 1px solid black;
@@ -317,6 +319,7 @@ input[type="button"] {
 
 .delete-post {
     border: 1px solid black;
+    background-color: white;
     border-radius: 3px;
     padding: 10px 5px;
 }
@@ -335,4 +338,8 @@ input[type="button"] {
 
 .dcomplete a {
     text-decoration: none;
+}
+
+.largefont {
+    font-size: 15px;
 }
