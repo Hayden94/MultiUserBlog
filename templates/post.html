@@ -8,12 +8,13 @@
     </div>
 
     <div class="post-date">
-      {{post.created.strftime("%b %d, %Y")}}
+      {{post.created.strftime("%m/%d/%y")}}
     </div>
   </div>
 
   <div class="post-content">
     {{post.content | safe}}
+    <br>
   </div>
 
   <div class="post-footer">
@@ -46,8 +47,8 @@
     <i class="comment-details"><b>{{comment.author.name}}</b>: {{comment.content}}</i>
 
     <div class="comment-links">
-      <a href="/comment/{{post.key().id()}}/edit/{{comment.key().id()}}/" class="largefont">&#128393;</a>
-      <a href="/comment/{{post.key().id()}}/delete/{{comment.key().id()}}/" class="largefont">&#10008;</a>
+      <a href="/comment/edit/{{comment.key().id()}}" class="largefont">&#128393;</a>
+      <a href="/comment/delete/{{comment.key().id()}}" class="largefont">&#10008;</a>
     </div>
   </div>
 {% endfor %}
