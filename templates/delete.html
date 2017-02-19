@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+	{% if deletepost %}
 	<h2 class="red-title">Delete {{title}}</h2>
 
 	<div class="delete-post">
@@ -24,5 +25,21 @@
 	</form>
 
 	<a href="/post/{{post_id}}" class="cancel-link"><p>Cancel</p></a>
+	{% else %}
+	<h2 class="red-title">Delete {{title}}</h2>
+
+	<div class="delete-post">
+		<div class="post-content">{{content}}</div>
+	</div>
+	
+	<div class="delete-message">{{message}}</div>
+
+	<form method="post">
+		<input type="submit" value="Confirm" class="submit">
+	</form>
+
+	<a href="/post/{{post_id}}" class="cancel-link"><p>Cancel</p></a>
+
+	{% endif %}
 
 {% endblock %}

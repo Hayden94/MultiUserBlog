@@ -11,9 +11,6 @@
           <td>
             <input type="text" name="username" value="{{username}}">
           </td>
-          <td class="error">
-            {{error_username}}
-          </td>
         </tr>
 
         <tr>
@@ -22,9 +19,6 @@
           </td>
           <td>
             <input type="password" name="password" value="">
-          </td>
-          <td class="error">
-            {{error_password}}
           </td>
         </tr>
 
@@ -35,9 +29,6 @@
           <td>
             <input type="password" name="verify" value="">
           </td>
-          <td class="error">
-            {{error_verify}}
-          </td>
         </tr>
 
         <tr>
@@ -47,9 +38,6 @@
           <td>
             <input type="text" name="email" value="{{email}}">
           </td>
-          <td class="error">
-            {{error_email}}
-          </td>
         </tr>
       </table>
 
@@ -57,5 +45,12 @@
 
       <p class="signlog-link"><a href="/login" class="logged-1">Login</a></p>
     </form>
+
+    <div class="error">
+      <p>{{error_username}}</p>
+      <p>{{error_password}}</p>
+      <p>{{error_verify}}</p>
+      <p>{{error_email}}</p>
+    </div>    
 
 {% endblock %}

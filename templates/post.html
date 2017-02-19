@@ -47,8 +47,8 @@
     <i class="comment-details"><b>{{comment.author.name}}</b>: {{comment.content}}</i>
 
     <div class="comment-links">
-      <a href="/comment/edit/{{comment.key().id()}}" class="largefont">&#128393;</a>
-      <a href="/comment/delete/{{comment.key().id()}}" class="largefont">&#10008;</a>
+      <a href="/comment/edit/{{post.key().id()}}/{{comment.key().id()}}" class="largefont">&#128393;</a>
+      <a href="/comment/delete/{{post.key().id()}}/{{comment.key().id()}}" class="largefont">&#10008;</a>
     </div>
   </div>
 {% endfor %}

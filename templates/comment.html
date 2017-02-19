@@ -2,7 +2,11 @@
 
 {% block content %}
 	<form method="post">
-		<h2 class="blue-title">Comment</h2>
+		{% if addcomment %}
+		<h2 class="blue-title">{{title}}</h2>
+		{% else %}
+		<h2 class="red-title">{{title}}</h2>
+		{% endif %}
 
 		<textarea class="comment-field" name="content">{{content}}</textarea>
 
