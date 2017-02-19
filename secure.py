@@ -5,6 +5,7 @@ import hashlib
 import re
 
 from secure import *
+from string import letters
 
 SECRET = 'strike1298'
 

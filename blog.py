@@ -87,18 +87,18 @@ class Signup(Handler):
 					  email = self.email)
 
 		if not valid_username(self.username):
-			params['error_username'] = "Please enter a valid username"
+			params['error_username'] = "Please enter a valid username."
 			have_error = True
 
 		if not valid_password(self.password):
-			params['error_password'] = "Please enter a valid password"
+			params['error_password'] = "Please enter a valid password."
 			have_error = True
 		elif self.password != self.verify:
-			params['error_verify'] = "Please enter matching passwords"
+			params['error_verify'] = "Please enter matching passwords."
 			have_error = True
 
 		if not valid_email(self.email):
-			params['error_email'] = "Please enter a valid email"
+			params['error_email'] = "Please enter a valid email."
 			have_error = True
 
 		if have_error:
@@ -320,7 +320,8 @@ class AddComment(Handler):
 			self.redirect('/login')
 		else:
 			title = 'Add Comment'
-			self.render('comment.html', title = title, post_id = post_id)
+
+			self.render('comment.html', title = title, post_id = post_id, addcomment = True)
 
 	def post(self, post_id):
 		# only logged in users can add comments
@@ -342,7 +343,7 @@ class AddComment(Handler):
 		else:
 			error = 'Please enter some content'
 
-			self.render('comment.html', content = content, error = error, addcomment = True)
+			self.render('comment.html', content = content, error = error)
 
 class DeleteComment(Handler):
 	def get(self, post_id, comment_id):
@@ -352,14 +353,14 @@ class DeleteComment(Handler):
 		# Only logged in users may delete comments
 		if not self.user:
 			self.redirect('/login')
-		# if user is not the author of the comment		
+		# if user is not the author of the comment      
 		elif not self.user.key() == comment.author.key():
 			error = 'You cannot delete another user\'s comment'
 			link_src = '/post/%s' % post_id
 			link_name = 'Back'
 
-			self.render('information.html', error = error, link_src = link_src, link_name = link_name) 	
-		# if user is the author of the comment		
+			self.render('information.html', error = error, link_src = link_src, link_name = link_name)  
+		# if user is the author of the comment      
 		else:
 			title = 'Comment'
 			message = 'Are you sure you want to delete this comment?'
@@ -391,7 +392,7 @@ class EditComment(Handler):
 			link_src = '/post/%s' % post_id
 			link_name = 'Back'
 
-			self.render('information.html', error = error, link_src = link_src, link_name = link_name) 	
+			self.render('information.html', error = error, link_src = link_src, link_name = link_name)  
 		# if user is the author of the comment
 		else:
 			title = 'Edit Comment'
@@ -417,10 +418,6 @@ class EditComment(Handler):
 			error = 'Please enter some content'
 
 			self.render('comment.html', title = title, content = content, post_id = post_id, error = error, addcoment = False, edit = True)
-
-
-
-# Handler for welcome after sign up, deletion confirmation, etc.
 
 class Information(Handler):
 	def get(self):

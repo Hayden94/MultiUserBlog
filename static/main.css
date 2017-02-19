@@ -96,6 +96,7 @@ table {
     border-radius: 3px;
     padding: 1px 15px;
     background-color: red;
+    text-align: center;
 }
 
 .cancel-link p:hover {
