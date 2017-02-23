@@ -4,32 +4,22 @@
 	<h2>Login</h2>
 
 	<form method="post">
-		<table>
-			<tr>
-				<td class="label">
-					Username: 
-				</td>
-				<td>
-					<input type="text" name="username" value="{{username}}">
-				</td>
-			</tr>
+		<div class="formbg">
+			<p>Username</p>
+			<input type="text" name="username" value="{{username}}"><br>
 
-			<tr>
-				<td class="label">
-					Password: 
-				</td>
-				<td>
-					<input type="password" name="password" value="">
-				</td>
-			</tr>
-		</table>
+			<p>Password</p>
+			<input type="password" name="password" value=""><br><br>
 
-		<input type="submit" class="submit">
-
-		<p class="signlog-link"><a href="/signup" class="logged-1">Signup</a></p>
-
-		<div class="error">
-			{{error}}
+			<input type="submit" class="submit">
 		</div>
 	</form>
+
+	<p class="signlog-link">
+		<a href="/signup" class="logged-1">Signup</a>
+	</p>
+
+	<div class="error">
+		{{error}}
+	</div>
 {% endblock %}

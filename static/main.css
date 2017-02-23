@@ -16,11 +16,6 @@ h2 {
     margin-bottom: 20px;
 }
 
-table {
-    text-align: center;
-    margin: 0 auto;
-}
-
 .welcome {
     text-align: center;
 }
@@ -36,6 +31,7 @@ table {
 
 .signlog-link {
     margin-top: 5px;
+    text-align: center;
 }
 
 .signlog-link a {
@@ -153,19 +149,6 @@ form {
     text-decoration: none;
 }
 
-form table {
-    margin-bottom: 10px;
-}
-
-label {
-  display: block;
-  font-size: 20px;
-}
-
-label + label {
-    margin-top: 20px;
-}
-
 input[type=text] {
     font-family: monospace;
 }
@@ -183,9 +166,20 @@ textarea {
     font-family: monospace;
 }
 
+.formbg {
+    display: inline-block;
+    background-color: #222;
+    border: 5px solid #007acc;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px black;
+    color: white;
+    padding: 0px 15px 10px 15px;
+    margin-bottom: 5px;
+}
+
 .like-div {
     position: absolute;
-    left: 0px;
+    left: 0px
 }
 
 .like-btn {

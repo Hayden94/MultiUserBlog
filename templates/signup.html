@@ -4,48 +4,26 @@
 
     <h2>Signup</h2>
     <form method="post">
-      <table>
-        <tr>
-          <td class="label">
-            Username: 
-          </td>
-          <td>
-            <input type="text" name="username" value="{{username}}">
-          </td>
-        </tr>
+      <div class="formbg">
+        <p>Username</p>
+        <input type="text" name="username" value="{{username}}"><br>
 
-        <tr>
-          <td class="label">
-            Password: 
-          </td>
-          <td>
-            <input type="password" name="password" value="">
-          </td>
-        </tr>
+        <p>Password</p>
+        <input type="password" name="password" value=""><br>
 
-        <tr>
-          <td class="label">
-            Verify Password: 
-          </td>
-          <td>
-            <input type="password" name="verify" value="">
-          </td>
-        </tr>
+        <p>Verify Password</p>
+        <input type="password" name="verify" value=""><br>
 
-        <tr>
-          <td class="label">
-            Email (optional): 
-          </td>
-          <td>
-            <input type="text" name="email" value="{{email}}">
-          </td>
-        </tr>
-      </table>
+        <p>Email (optional)</p>
+        <input type="text" name="email" value="{{email}}"><br><br>
 
-      <input type="submit" class="submit">
-
-      <p class="signlog-link"><a href="/login" class="logged-1">Login</a></p>
+        <input type="submit" class="submit"><br>
+      </div>
     </form>
+
+    <p class="signlog-link" style="text-align: center;">
+      <a href="/login" class="logged-1">Login</a>
+    </p>
 
     <div class="error">
       <p>{{error_username}}</p>
