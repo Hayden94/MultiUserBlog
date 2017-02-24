@@ -3,9 +3,10 @@ from models.post import Post
 from models.comment import Comment
 from models.likes import Likes
 
+
 class PostPage(Handler):
 	def get(self, post_id):
-		post = Post.get_by_id(int(post_id), parent = blog_key())
+		post = Post.get_by_id(int(post_id), parent=blog_key())
 		comments = Comment.all().ancestor(post)
 
 		# make sure the post exists
@@ -20,13 +21,27 @@ class PostPage(Handler):
 				status = u"\U0001F44E"
 			else:
 				status = u"\U0001F44D"
-			self.render('post.html', post = post, value = post.value, post_id = post_id, status = status,  comments = comments)
+			self.render(
+				'post.html',
+				post=post,
+				value=post.value,
+				post_id=post_id,
+				status=status, 
+				comments=comments
+				)
 		else:
 			status = u"\U0001F44D"
-			self.render('post.html', post = post, value = post.value, post_id = post_id, status = status, comments = comments)
+			self.render(
+				'post.html',
+				post=post,
+				value=post.value,
+				post_id=post_id,
+				status=status,
+				comments=comments
+				)
 
 	def post(self, post_id):
-		post = Post.get_by_id(int(post_id), parent = blog_key())
+		post = Post.get_by_id(int(post_id), parent=blog_key())
 
 		# if post exists
 		if not self.post_exists(post_id):
@@ -40,7 +55,12 @@ class PostPage(Handler):
 			link_src = '/post/' + post_id
 			link_name = 'Back'
 
-			self.render('information.html', error = error, link_src = link_src, link_name = link_name)			
+			self.render(
+				'information.html',
+				error=error,
+				link_src=link_src,
+				link_name=link_name
+				)			
 		# like post and put into db
 		else:			
 			user_id = self.user.key().id()
@@ -52,7 +72,11 @@ class PostPage(Handler):
 				post.value -= 1
 				post.put()
 			else:
-				like = Likes(parent = post, user = user_id, haveliked = True)
+				like = Likes(
+					parent=post,
+					user=user_id,
+					haveliked=True
+					)
 				like.put()
 
 				if like.haveliked is True:

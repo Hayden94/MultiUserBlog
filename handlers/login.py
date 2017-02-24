@@ -1,6 +1,7 @@
 from main import Handler
 from models.user import User
 
+
 class Login(Handler):
 	def get(self):
 		self.render('login.html')
@@ -15,4 +16,7 @@ class Login(Handler):
 			self.redirect('/')
 		else:
 			error = 'Invalid Username or password'
-			self.render('login.html', error = error)
+			self.render(
+				'login.html',
+				error=error
+				)

@@ -2,10 +2,11 @@ from main import Handler, blog_key
 from models.post import Post
 from models.comment import Comment
 
+
 class EditComment(Handler):
 	def get(self, post_id, comment_id):
-		post = Post.get_by_id(int(post_id), parent = blog_key())
-		comment = Comment.get_by_id(int(comment_id), parent = post)
+		post = Post.get_by_id(int(post_id), parent=blog_key())
+		comment = Comment.get_by_id(int(comment_id), parent=post)
 
 		# if post exists
 		if not self.post_exists(post_id):
@@ -19,16 +20,29 @@ class EditComment(Handler):
 			link_src = '/post/%s' % post_id
 			link_name = 'Back'
 
-			self.render('information.html', error = error, link_src = link_src, link_name = link_name)  
+			self.render(
+				'information.html',
+				error=error,
+				link_src=link_src,
+				link_name=link_name
+				)  
 		# if user is the author of the comment
 		else:
 			title = 'Edit Comment'
 			content = comment.content
 
-			self.render('comment.html', title = title, content = content, post_id = post_id, addcomment = False, edit = True)
+			self.render(
+				'comment.html',
+				title=title,
+				content=content,
+				post_id=post_id,
+				addcomment=False,
+				edit=True
+				)
+
 	def post(self, post_id, comment_id):
-		post = Post.get_by_id(int(post_id), parent = blog_key())
-		comment = Comment.get_by_id(int(comment_id), parent = post)
+		post = Post.get_by_id(int(post_id), parent=blog_key())
+		comment = Comment.get_by_id(int(comment_id), parent=post)
 		content = self.request.get('content')
 		
 		# if post exists
@@ -39,7 +53,7 @@ class EditComment(Handler):
 			self.redirect('/login')
 		# if content has value
 		elif content:
-			c = Comment.get_by_id(int(comment_id), parent = post)
+			c = Comment.get_by_id(int(comment_id), parent=post)
 			c.content = content
 			c.put()
 			self.redirect('/post/%s' % post_id)
@@ -48,4 +62,12 @@ class EditComment(Handler):
 			title = 'Edit Comment'
 			error = 'Please enter some content'
 
-			self.render('comment.html', title = title, content = content, post_id = post_id, error = error, addcoment = False, edit = True)
+			self.render(
+				'comment.html',
+				title=title,
+				content=content,
+				post_id=post_id,
+				error=error,
+				addcoment=False,
+				edit=True
+				)

@@ -1,6 +1,7 @@
 from google.appengine.ext import db
 from secure import make_pw_hash, valid_pw
 
+
 class User(db.Model):
 	name = db.StringProperty(required=True)
 	pw_hash = db.StringProperty(required=True)
@@ -8,7 +9,7 @@ class User(db.Model):
 
 	@classmethod
 	def by_id(cls, uid):
-		return User.get_by_id(uid, parent = users_key())
+		return User.get_by_id(uid, parent=users_key())
 
 	@classmethod
 	def by_name(cls, name):
@@ -16,12 +17,14 @@ class User(db.Model):
 		return u
 
 	@classmethod
-	def register(cls, name, pw, email = None):
+	def register(cls, name, pw, email=None):
 		pw_hash = make_pw_hash(name, pw)
-		return User(parent = users_key(),
-					name = name,
-					pw_hash = pw_hash,
-					email = email)
+		return User(
+			parent=users_key(),
+			name=name,
+			pw_hash=pw_hash,
+			email=email
+			)
 
 	@classmethod
 	def login(cls, name, pw):
@@ -29,5 +32,6 @@ class User(db.Model):
 		if u and valid_pw(name, pw, u.pw_hash):
 			return u
 
-def users_key(group = 'default'):
+
+def users_key(group='default'):
 	return db.Key.from_path('users', group)

@@ -2,22 +2,24 @@ import re
 from main import Handler
 from models.user import User
 
-# Check valid signup inputs
 
+# Check valid signup inputs
 USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
 def valid_username(username):
 	return username and USER_RE.match(username)
+
 
 PASS_RE = re.compile(r"^.{3,20}$")
 def valid_password(password):
 	return password and PASS_RE.match(password)
 
+
 EMAIL_RE  = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
 def valid_email(email):
 	return not email or EMAIL_RE.match(email)
 
-class Signup(Handler):
 
+class Signup(Handler):
 	def get(self):
 		self.render("signup.html")
 
@@ -28,8 +30,8 @@ class Signup(Handler):
 		self.verify = self.request.get('verify')
 		self.email = self.request.get('email')
 
-		params = dict(username = self.username,
-					  email = self.email)
+		params = dict(username=self.username,
+					  email=self.email)
 
 		if not valid_username(self.username):
 			params['error_username'] = "Please enter a valid username."
@@ -60,7 +62,7 @@ class Register(Signup):
 		u = User.by_name(self.username)
 		if u:
 			msg = 'That user already exists.'
-			self.render('signup.html', error_username = msg)
+			self.render('signup.html', error_username=msg)
 		else:
 			u = User.register(self.username, self.password, self.email)
 			u.put()
@@ -71,4 +73,9 @@ class Register(Signup):
 			link_src = '/new'
 			link_name = 'New Post'
 
-			self.render('information.html', message = message, link_src = link_src, link_name = link_name)
+			self.render(
+				'information.html',
+				message=message,
+				link_src=link_src,
+				link_name=link_name
+				)

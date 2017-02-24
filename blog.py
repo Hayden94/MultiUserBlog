@@ -6,7 +6,7 @@ import string
 
 from google.appengine.ext import db
 import secure
-from handlers import Main, NewPost, Register, Login, Logout, PostPage, EditPost, DeletePost, AddComment, EditComment, DeleteComment, Information
+from handlers import *
 
 app = webapp2.WSGIApplication([('/', Main),
 							   ('/new', NewPost),

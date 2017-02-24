@@ -1,9 +1,10 @@
 from main import Handler, blog_key
 from models.post import Post
 
+
 class EditPost(Handler):
 	def get(self, post_id):
-		post = Post.get_by_id(int(post_id), parent = blog_key())
+		post = Post.get_by_id(int(post_id), parent=blog_key())
 		title = 'Edit Post'
 
 		# if post doesn't exist
@@ -17,15 +18,27 @@ class EditPost(Handler):
 			link_src = '/post/' + post_id
 			link_name = 'Back'
 
-			self.render('information.html', error = error, link_src = link_src, link_name = link_name)
+			self.render(
+				'information.html',
+				error=error,
+				link_src=link_src,
+				link_name=link_name
+				)
 		# if the user is not the author of the post
 		else:
 			subject = post.subject
 			content = post.content
-			self.render("newpost.html", subject = subject, content = content, post_id = post_id, title = title, edit = True)
+			self.render(
+				"newpost.html",
+				subject=subject,
+				content=content,
+				post_id=post_id,
+				title=title,
+				edit=True
+				)
 
 	def post(self, post_id):
-		post = Post.get_by_id(int(post_id), parent = blog_key())
+		post = Post.get_by_id(int(post_id), parent=blog_key())
 		subject = self.request.get('subject')
 		content = self.request.get('content')
 
@@ -37,7 +50,7 @@ class EditPost(Handler):
 			self.redirect('/login')
 		# if subject and content section has values
 		elif (subject and content) and self.user_owns_post(post_id):
-			p = Post.get_by_id(int(post_id), parent = blog_key())
+			p = Post.get_by_id(int(post_id), parent=blog_key())
 			p.subject = subject
 			p.content = content
 			p.put()
@@ -47,4 +60,12 @@ class EditPost(Handler):
 			title = 'Edit Post'
 			error = 'Please enter both a subject and some content!'
 
-			self.render('newpost.html', subject = subject, title = title, content = content, error = error, post_id = post_id, edit = True)
+			self.render(
+				'newpost.html',
+				subject=subject,
+				title=title,
+				content=content,
+				error=error,
+				post_id=post_id,
+				edit=True
+				)

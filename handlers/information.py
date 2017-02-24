@@ -1,5 +1,6 @@
 from main import Handler
 
+
 class Information(Handler):
 	def get(self):
 		if not self.user:
@@ -9,4 +10,9 @@ class Information(Handler):
 			link_src = '/'
 			link_name = 'Home'
 
-			self.render('information.html', error = error, link_src = link_src, link_name = link_name)
+			self.render(
+				'information.html',
+				error=error,
+				link_src=link_src,
+				link_name=link_name
+				)

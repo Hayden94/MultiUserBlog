@@ -8,19 +8,25 @@ from google.appengine.ext import db
 from secure import make_secure_val, check_secure_val
 
 template_dir = os.path.join('templates')
-jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
-							   autoescape = True)
+jinja_env = jinja2.Environment(
+	loader=jinja2.FileSystemLoader(template_dir),
+	autoescape=True
+	)
+
 
 def render_str(template, **params):
 	t = jinja_env.get_template(template)
 	return t.render(params)
 
+
 def render_post(response, post):
 	response.out.write('<b>' + post.subject + '</b><br>')
 	response.out.write(post.content)
 
-def blog_key(name = 'default'):
+
+def blog_key(name='default'):
 	return db.Key.from_path('blogs', name)
+
 
 class Handler(webapp2.RequestHandler):
 	def write(self, *a, **kw):
@@ -35,7 +41,9 @@ class Handler(webapp2.RequestHandler):
 
 	def set_secure_cookie(self, name, val):
 		cookie_val = make_secure_val(val)
-		self.response.headers.add_header('Set-Cookie', '%s=%s; Path=/' % (name, cookie_val))
+		self.response.headers.add_header(
+			'Set-Cookie',
+			'%s=%s; Path=/' % (name, cookie_val))
 
 	def read_secure_cookie(self, name):
 		cookie_val = self.request.cookies.get(name)
@@ -54,19 +62,19 @@ class Handler(webapp2.RequestHandler):
 
 	# functions for post and comment validity
 	def post_exists(self, post_id):
-		post = Post.get_by_id(int(post_id), parent = blog_key())
+		post = Post.get_by_id(int(post_id), parent=blog_key())
 		
 		return post
 
 	def comment_exists(self, post_id, comment_id):
-		post = Post.get_by_id(int(post_id), parent = blog_key())
-		comment = Comment.get_by_id(int(comment_id), parent = post)
+		post = Post.get_by_id(int(post_id), parent=blog_key())
+		comment = Comment.get_by_id(int(comment_id), parent=post)
 
 		return post and comment
 
 	# functions for users own post/comment validity
 	def user_owns_post(self, post_id):
-		post = Post.get_by_id(int(post_id), parent = blog_key())
+		post = Post.get_by_id(int(post_id), parent=blog_key())
 		user_id = self.user.key().id()
 
 		if user_id == post.creator:
@@ -74,23 +82,32 @@ class Handler(webapp2.RequestHandler):
 
 	def user_owns_comment(self, post_id, comment_id):
 		user_id = self.user.key()
-		post = Post.get_by_id(int(post_id), parent = blog_key())
-		comment = Comment.get_by_id(int(comment_id), parent = post)
+		post = Post.get_by_id(int(post_id), parent=blog_key())
+		comment = Comment.get_by_id(int(comment_id), parent=post)
 
 		if user_id == comment.author.key():
 			return post and comment
 
 	# error page
 	def render_error(self, post_id):
-		post = Post.get_by_id(int(post_id), parent = blog_key())
+		post = Post.get_by_id(int(post_id), parent=blog_key())
 
 		error = 'ERROR(404)'
 		link_src = '/post/' + post_id
 		link_name = 'Back'
 
-		self.render('information.html', error = error, link_src = link_src, link_name = link_name)
+		self.render(
+			'information.html',
+			error=error,
+			link_src=link_src,
+			link_name=link_name
+			)
+
 
 class Main(Handler):
 	def get(self):
 		posts = db.GqlQuery("select * from Post order by created desc limit 10")
-		self.render('front.html', posts = posts)
+		self.render(
+			'front.html',
+			posts=posts
+			)
