@@ -49,6 +49,7 @@ class AddComment(Handler):
 
 			self.render(
 				'comment.html', 
+				post_id = post_id,
 				title=title, 
 				content=content, 
 				error=error, 

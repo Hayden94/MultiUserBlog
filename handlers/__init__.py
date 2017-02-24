@@ -10,3 +10,4 @@ from main import Main
 from newpost import NewPost
 from postpage import PostPage
 from register import Register
+from likepost import LikePost

@@ -1,30 +1,52 @@
-# MultiUserBlog
-Udacity 
---Blog with the functionality to create accounts, post blog posts, like posts, edit posts, 
---add comments, edit comments, delete posts, and delete comments.
+# Udacity Full-Stack Nanodegree - Project 3 - MultiUserBlog
 
-Project 3 - Full-Stack Nanodegree
+![alt front](http://i.imgur.com/YYdou0x.jpg)
 
+This web app features a blog created using the Google App Engine where users have the ability to create their own unique accounts and interact with posts. With these unique accounts, users can create, edit, and delete their own posts. Users can also add, edit, and delete their own comments on any post available. A user may also like any other user's post, but not their own. The account signup, login, and logout features offers security and stability.
 
+## Getting Started
 
-In order to view the blog locally:
-  
+### Prerequisites
 
-	1) Have Google Cloud SDK installed
-  
+In order to get this project up and running, you will need Python SDK and Google Cloud SDK installed.
 
-	2) CD into blog directory
-  
+```
+The Python SDK download can be found [here](http://legacy.python.org/download/).
 
-	3) Run the command dev_appserver.py .
- 
- 
-	4) Go to localhost:8080 on your preferred web browser
-  
+The Google Cloud SDK download can be found [here](https://cloud.google.com/sdk/downloads).
 
+	-Download and install both SDK's for the operating system you are currently using.
+```
 
-In order to view the blog remotely:
-  
+## Deployment
 
-	1) In order to view the blog, simply go to https://haydensblog-159222.appspot.com/ 
-	   in your preferred web browser
+**To view the project remotely, you can visit it live at the link [here](http://UpdateWhenNewProjectIs.Deployed)**
+
+**To run the project locally:**
+
+1. Open Google Cloud SDK and CD into the project directory (The dir where blog.py is located)
+
+![alt cd](http://i.imgur.com/KpwGdrY.jpg)
+
+2. Run the command: dev_appserver.py .
+
+![alt appserver](http://i.imgur.com/KpwGdrY.jpg)
+
+	-If the python file runs correctly, you will see a screen similar to the one below.
+
+![alt deploy](http://i.imgur.com/qGfWGvm.jpg)
+
+	3. Finally, go to localhost:8080 in your preferred web browser to user the blog.
+
+![alt localhost](http://i.imgur.com/qkqWf0W.jpg)
+
+## Built With
+
+* [Google App Engine](https://cloud.google.com/appengine/)
+* [Python](https://www.python.org/)
+* [HTML5](https://en.wikipedia.org/wiki/HTML5)
+* [CSS3](https://en.wikipedia.org/wiki/Cascading_Style_Sheets)
+
+## Authors
+
+* **Hayden Oster** - *Initial work* - [Hayden94](https://github.com/Hayden94)
