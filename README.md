@@ -35,7 +35,7 @@ The Google Cloud SDK download can be found [here](https://cloud.google.com/sdk/d
 
 ![alt deploy](http://i.imgur.com/373dbWz.jpg)
 
-	3. Finally, go to localhost:8080 in your preferred web browser to user the blog.
+3. Finally, go to localhost:8080 in your preferred web browser to user the blog.
 
 ![alt localhost](http://i.imgur.com/ddaXkS5.jpg)
 
