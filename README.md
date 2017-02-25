@@ -7,15 +7,15 @@ This web app features a blog created using the Google App Engine where users hav
 ## Getting Started
 
 ### Prerequisites
-
+```
 In order to get this project up and running, you will need Python SDK and Google Cloud SDK installed.
 
+Simply, -Download and install both SDK's for the operating system you are currently using.
+```
 
 The Python SDK download can be found [here](http://legacy.python.org/download/).
 
 The Google Cloud SDK download can be found [here](https://cloud.google.com/sdk/downloads).
-
-	-Download and install both SDK's for the operating system you are currently using.
 
 ## Deployment
 
@@ -23,11 +23,11 @@ The Google Cloud SDK download can be found [here](https://cloud.google.com/sdk/d
 
 **To run the project locally:**
 
-1. Open Google Cloud SDK and CD into the project directory (The dir where blog.py is located)
+* Open Google Cloud SDK and CD into the project directory (The dir where blog.py is located)
 
 ![alt cd](http://i.imgur.com/eHFpNy7.jpg)
 
-2. Run the command: dev_appserver.py .
+* Run the command: dev_appserver.py .
 
 ![alt appserver](http://i.imgur.com/k8pMLKa.jpg)
 
@@ -35,7 +35,7 @@ The Google Cloud SDK download can be found [here](https://cloud.google.com/sdk/d
 
 ![alt deploy](http://i.imgur.com/373dbWz.jpg)
 
-3. Finally, go to localhost:8080 in your preferred web browser to user the blog.
+* Finally, go to localhost:8080 in your preferred web browser to user the blog.
 
 ![alt localhost](http://i.imgur.com/ddaXkS5.jpg)
 
