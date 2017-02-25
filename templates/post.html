@@ -18,13 +18,13 @@
   </div>
 
   <div class="post-footer">
-    <div class="post-links">
-      <div class="like-div">
-        <form action="/like/{{post_id}}">
-          <a type="submit" class="like-btn largefont">{{status}}</a>
+    <div class="post-links">    
+      <form method="post" action="/like/{{post_id}}">
+        <div class="like-div">
+          <button type="submit" class="like-btn largefont">{{status}}</button>
           <div class="like-value largefont">{{value}}</div>
-        </form>
-      </div>
+        </div>      
+      </form>
     </div>
 
     <div class="ced-links">
