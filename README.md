@@ -10,7 +10,7 @@ This web app features a blog created using the Google App Engine where users hav
 ```
 In order to get this project up and running, you will need Python SDK and Google Cloud SDK installed.
 
-Simply, -Download and install both SDK's for the operating system you are currently using.
+Simply, download and install both SDK's for the operating system you are currently using.
 ```
 
 The Python SDK download can be found [here](http://legacy.python.org/download/).
@@ -19,7 +19,7 @@ The Google Cloud SDK download can be found [here](https://cloud.google.com/sdk/d
 
 ## Deployment
 
-**To view the project remotely, you can visit it live at the link [here](http://UpdateWhenNewProjectIs.Deployed)**
+**To view the project remotely, you can visit it live at the link [here](http://haydensblog-159900.appspot.com/)**
 
 **To run the project locally:**
 
