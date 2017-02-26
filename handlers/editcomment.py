@@ -51,6 +51,8 @@ class EditComment(Handler):
         # Only logged in users may delete comments
         elif not self.user:
             self.redirect('/login')
+        elif not self.comment_exists(post_id, comment_id):
+            self.render_error(post_id)
         # if content has value
         elif content:
             c = Comment.get_by_id(int(comment_id), parent=post)
